@@ -26,7 +26,6 @@ function VentaPage() {
     const fetchVentas = async () => {
         try {
             const ventasData = await VentaService.getAllVentas();
-            console.log(ventasData);
             setVentas(ventasData);
         } catch (error) {
             console.error('Error fetching ventas:', error);
@@ -53,10 +52,9 @@ function VentaPage() {
 
     const handleAddVenta = async (formData) => {
 
-        console.log(formData);
         try {
             await VentaService.createVenta(formData);
-            console.log(formData);
+
             fetchVentas();  // Actualiza la lista de ventas después de agregar una nueva
             setShowModal(false);
             setIsEditMode(false);
@@ -112,12 +110,12 @@ function VentaPage() {
     };
 
     const formatCurrency = (value) => {
-        return new Intl.NumberFormat('en-CO', {
+        return new Intl.NumberFormat('es-CO', {
             style: 'currency',
             currency: 'COP',
-            currencyDisplay: 'symbol',
         }).format(value);
     };
+
 
 
     return (

@@ -1,0 +1,244 @@
+INSERT INTO categorias (id, nombre) VALUES
+(1, 'Camisetas'),
+(2, 'Pantalones'),
+(3, 'Chaquetas'),
+(4, 'Vestidos'),
+(5, 'Zapatos'),
+(6, 'Accesorios'),
+(7, 'Ropa interior'),
+(8, 'Ropa deportiva'),
+(9, 'Ropa de abrigo'),
+(10, 'Ropa infantil');
+
+INSERT INTO productos (id, nombre, precio, talla, color, categoria_id) VALUES
+(1, 'Camiseta Roja', 50000, 'M', 'Rojo', 1),
+(2, 'Pantalón Azul', 75000, 'L', 'Azul', 2),
+(3, 'Chaqueta Verde', 62500, 'S', 'Verde', 3),
+(4, 'Vestido Negro', 100000, 'XL', 'Negro', 4),
+(5, 'Zapatos Blancos', 37500, 'M', 'Blanco', 5),
+(6, 'Accesorio Gris', 125000, 'L', 'Gris', 6),
+(7, 'Ropa Interior Rosa', 87500, 'S', 'Rosa', 7),
+(8, 'Ropa Deportiva Amarilla', 55000, 'XL', 'Amarillo', 8),
+(9, 'Abrigo Azul', 70000, 'M', 'Azul', 9),
+(10, 'Ropa Infantil Verde', 45000, 'L', 'Verde', 10),
+(11, 'Camiseta Roja 2', 80000, 'S', 'Rojo', 1),
+(12, 'Pantalón Negro 2', 112500, 'XL', 'Negro', 2),
+(13, 'Chaqueta Blanca 2', 67500, 'M', 'Blanco', 3),
+(14, 'Vestido Gris 2', 95000, 'L', 'Gris', 4),
+(15, 'Zapatos Rosa 2', 57500, 'S', 'Rosa', 5),
+(16, 'Accesorio Amarillo 2', 120000, 'XL', 'Amarillo', 6),
+(17, 'Ropa Interior Azul 2', 82500, 'M', 'Azul', 7),
+(18, 'Ropa Deportiva Verde 2', 52500, 'L', 'Verde', 8),
+(19, 'Abrigo Rojo 2', 92500, 'S', 'Rojo', 9),
+(20, 'Ropa Infantil Negro 2', 72500, 'XL', 'Negro', 10);
+
+INSERT INTO sedes (id, nombre, ciudad, telefono, departamento, direccion, color) VALUES
+(1, 'Sede 1', 'Bogotá', '123456789', 'Cundinamarca', 'Calle 1, Carrera 1', '#FF5733'),
+(2, 'Sede 2', 'Medellín', '987654321', 'Antioquia', 'Calle 2, Carrera 2', '#3498DB'),
+(3, 'Sede 3', 'Cali', '555555555', 'Valle del Cauca', 'Calle 3, Carrera 3', '#2ECC71'),
+(4, 'Sede 4', 'Cartagena', '777777777', 'Bolívar', 'Calle 4, Carrera 4', '#F1C40F'),
+(5, 'Sede 5', 'Barranquilla', '999999999', 'Atlántico', 'Calle 5, Carrera 5', '#8E44AD');
+
+INSERT INTO vendedors (cedula, nombre, telefono, sede_id) VALUES
+(1234567890, 'Juan Pérez', '123456789', 1),
+(2345678901, 'María Gómez', '987654321', 2),
+(3456789012, 'Carlos Rodríguez', '555555555', 3),
+(4567890123, 'Ana Martínez', '777777777', 4),
+(5678901234, 'Pedro Sánchez', '999999999', 5),
+(6789012345, 'Laura Torres', '111111111', 1),
+(7890123456, 'Sergio López', '222222222', 2),
+(8901234567, 'Lucía Herrera', '333333333', 3),
+(9012345678, 'Andrés Castro', '444444444', 4),
+(1011121314, 'Julia Ramírez', '555555555', 5);
+
+INSERT INTO facturas (id, fecha, sede_id, empleado_cedula, total) VALUES
+(1, '2023-11-20 12:30:00', 1, 1234567890, 175000),
+(2, '2023-11-21 14:45:00', 2, 2345678901, 62500),
+(3, '2023-11-22 16:00:00', 3, 3456789012, 275000),
+(4, '2023-11-23 11:00:00', 1, 1234567890, 212500),
+(5, '2023-11-24 13:15:00', 2, 2345678901, 362500),
+(6, '2023-11-25 14:30:00', 3, 3456789012, 387500),
+(7, '2023-11-26 16:45:00', 1, 1234567890, 250000),
+(8, '2023-11-27 18:00:00', 2, 2345678901, 287500),
+(9, '2023-11-28 19:15:00', 3, 3456789012, 312500),
+(10, '2023-11-29 20:30:00', 1, 1234567890, 400000),
+(11, '2023-11-30 21:45:00', 2, 2345678901, 162500),
+(12, '2023-12-01 22:00:00', 3, 3456789012, 387500),
+(13, '2023-12-02 23:15:00', 1, 1234567890, 200000),
+(14, '2023-12-03 00:30:00', 2, 2345678901, 212500),
+(15, '2023-12-04 01:45:00', 3, 3456789012, 312500),
+(16, '2023-12-05 03:00:00', 1, 1234567890, 400000),
+(17, '2023-12-06 04:15:00', 2, 2345678901, 162500),
+(18, '2023-12-07 05:30:00', 3, 3456789012, 387500),
+(19, '2023-12-08 06:45:00', 1, 1234567890, 200000),
+(20, '2023-12-09 08:00:00', 2, 2345678901, 212500),
+(21, '2023-12-10 09:15:00', 3, 3456789012, 175000),
+(22, '2023-12-11 10:30:00', 1, 1234567890, 187500),
+(23, '2023-12-12 11:45:00', 2, 2345678901, 200000),
+(24, '2023-12-13 13:00:00', 3, 3456789012, 162500),
+(25, '2023-12-14 14:15:00', 1, 1234567890, 287500),
+(26, '2023-12-15 15:30:00', 2, 2345678901, 175000),
+(27, '2023-12-16 16:45:00', 3, 3456789012, 287500),
+(28, '2023-12-17 18:00:00', 1, 1234567890, 175000),
+(29, '2023-12-18 19:15:00', 2, 2345678901, 62500),
+(30, '2023-12-19 20:30:00', 3, 3456789012, 250000);
+
+-- Factura 1
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 1),
+(1, 2, 1);
+
+-- Factura 2
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 3, 2);
+
+-- Factura 3
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 1, 3),
+(2, 3, 3);
+
+-- Factura 4
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 2, 4),
+(1, 3, 4);
+
+-- Factura 5
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 1, 5),
+(2, 2, 5),
+(1, 3, 5);
+
+-- Factura 6
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 6),
+(1, 2, 6),
+(2, 3, 6);
+
+-- Factura 7
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 7),
+(1, 2, 7),
+(2, 3, 7);
+
+-- Factura 8
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 1, 8),
+(1, 2, 8),
+(1, 3, 8);
+
+-- Factura 9
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 9),
+(2, 2, 9),
+(1, 3, 9);
+
+-- Factura 10
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 10),
+(3, 2, 10),
+(2, 3, 10);
+
+-- Factura 11
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 11),
+(1, 3, 11);
+
+-- Factura 12
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 12),
+(2, 2, 12),
+(3, 3, 12);
+
+-- Factura 13
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 2, 13),
+(2, 3, 13);
+
+-- Factura 14
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 1, 14),
+(1, 3, 14);
+
+-- Factura 15
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 15),
+(2, 2, 15),
+(1, 3, 15);
+
+-- Factura 16
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 16),
+(3, 2, 16),
+(2, 3, 16);
+
+-- Factura 17
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 17),
+(1, 3, 17);
+
+-- Factura 18
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 2, 18);
+
+-- Factura 19
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 19),
+(2, 2, 19),
+(1, 3, 19);
+
+-- Factura 20
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 1, 20),
+(1, 2, 20),
+(1, 3, 20);	
+
+-- Factura 21
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 21),
+(1, 2, 21);
+
+-- Factura 22
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 3, 22);
+
+-- Factura 23
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 23),
+(2, 2, 23);
+
+-- Factura 24
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 24),
+(1, 3, 24);
+
+-- Factura 25
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 2, 25),
+(1, 3, 25);
+
+-- Factura 26
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 1, 26),
+(2, 2, 26);
+
+-- Factura 27
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(3, 2, 27),
+(1, 3, 27);
+
+-- Factura 28
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 28),
+(1, 2, 28);
+
+-- Factura 29
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(1, 3, 29);
+
+-- Factura 30
+INSERT INTO items(cantidad, producto_id, factura_id) VALUES
+(2, 1, 30),
+(2, 2, 30);
+
+
+

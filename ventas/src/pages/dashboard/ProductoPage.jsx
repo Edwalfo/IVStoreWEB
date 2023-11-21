@@ -112,7 +112,7 @@ function ProductoPage() {
     };
 
     const formatCurrency = (value) => {
-        return new Intl.NumberFormat('en-CO', {
+        return new Intl.NumberFormat('es-CO', {
             style: 'currency',
             currency: 'COP',
             currencyDisplay: 'symbol',

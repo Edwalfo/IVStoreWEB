@@ -1,7 +1,7 @@
 // CategoriaPage.js
 import React, { useEffect, useState } from 'react';
 import CategoriaModal from '../../components/modal/CategoriaModal';
-import CategoriaTable from '../../components/table/categoriaTable';
+import CategoriaTable from '../../components/table/CategoriaTable';
 import CategoriaService from '../../services/CategoriaServices';
 
 function CategoriaPage() {

@@ -66,26 +66,26 @@ const HistorialPage = () => {
 
     const calcularTotalFormatoColombiano = (items) => {
         const total = items.reduce((accum, item) => accum + parseFloat(item.total), 0);
-    
+
         const formatoColombiano = new Intl.NumberFormat('es-CO', {
             style: 'currency',
             currency: 'COP'
         });
-    
+
         return formatoColombiano.format(total);
     };
-    
+
     const calcularCostoTotalVentas = (sede_id) => {
         const facturasSede = facturas.filter(
             (factura) => factura.sede_id === sede_id && filtrarPorFecha(factura.fecha)
         );
-    
+
         return calcularTotalFormatoColombiano(facturasSede);
     };
-    
+
     const calcularSumaVentas = () => {
         const ventasFiltradas = facturas.filter((factura) => filtrarPorFecha(factura.fecha));
-    
+
         if (fechaInicio && fechaFin) {
             // Si se han seleccionado fechas
             return `Suma total de ventas (en el período seleccionado): ${calcularTotalFormatoColombiano(ventasFiltradas)}`;
@@ -138,6 +138,7 @@ const HistorialPage = () => {
         setFechaFin(e.target.value);
     };
 
+    //////////////////////////////////
     const filtrarPorFecha = (facturaFecha) => {
         if (!fechaInicio || !fechaFin) {
             return true; // No se aplican filtros si las fechas no están especificadas
@@ -245,7 +246,7 @@ const HistorialPage = () => {
                         <table className="table table-bordered table-striped">
                             <thead className="thead-dark">
                                 <tr>
-                                    <th>ID</th>
+                                    <th>N°</th>
                                     <th>Nombre</th>
                                     <th>Color</th>
                                     <th>Numero de ventas</th>
@@ -276,21 +277,18 @@ const HistorialPage = () => {
                             </tbody>
                         </table>
                     </div>
-
-                    <div className="card mb-4">
-                        <div className="card-body" >
-                            <h3>Gráfico de Porcentaje de Ventas por Sede</h3>
-
-                            <div className="card-body" style={{ width: "auto", height: "400px" }}>
-                                <PieGrafica datosPorSede={porcentajesVentasPorSede} />
-                            </div>
-
-
-
-                        </div>
-                    </div>
-
                 </div>
+
+
+            </div>
+            <div className="card mb-4">
+                <div className="card-header">
+                    <i className="fas fa-chart-bar me-1"></i> Gráfico de Porcentaje de Ventas por Sede
+                </div>
+                <div className="card-body" style={{ width: "auto", height: "400px" }}>
+                    <PieGrafica datosPorSede={porcentajesVentasPorSede} />
+                </div>
+
             </div>
         </div>
     );

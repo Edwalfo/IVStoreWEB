@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import FacturasServices from '../../services/VentaServices';
 import SedeServices from '../../services/SedeServices';
-import VendedorServices from '../../services/IncentivoServices';
+import IncentivoServices from '../../services/IncentivoServices';
 import Histograma from '../../components/admin/HistogramaGrafica'
 
 function IncentivoPage() {
-   
+
     const [ventas, setVentas] = useState([]);
     const [vendedores, setVendedors] = useState([]);
     const [sedes, setSedes] = useState([]);
@@ -42,7 +42,7 @@ function IncentivoPage() {
 
     const fetchVendedores = async () => {
         try {
-            const vendedorData = await VendedorServices.getCountVentas();
+            const vendedorData = await IncentivoServices.getCountVentas();
             setVendedors(vendedorData);
             setVendedoresFiltrados(vendedorData); // Inicializar vendedoresFiltrados
         } catch (error) {
@@ -50,38 +50,62 @@ function IncentivoPage() {
         }
     };
 
-    const aplicarFiltro = () => {
+
+
+    // Función para obtener las ventas filtradas por fecha
+    const obtenerVentasFiltradas = async () => {
+        if (fechaInicio && fechaFin) {
+            return await IncentivoServices.getCountVentas(fechaInicio, fechaFin);
+        } else {
+            return await IncentivoServices.getCountVentas();
+        }
+    };
+
+    // Función para aplicar el filtro por meta a los vendedores
+    const aplicarFiltroPorMeta = (ventasFiltradas, metaVentas) => {
+        if (metaVentas) {
+            return ventasFiltradas.filter((vendedor) => {
+                const totalVentas = parseFloat(vendedor.cantidad_ventas) || 0;
+
+                switch (filtroCondicion) {
+                    case '<':
+                        return totalVentas < metaVentas;
+                    case '<=':
+                        return totalVentas <= metaVentas;
+                    case '>=':
+                        return totalVentas >= metaVentas;
+                    case '=':
+                        return totalVentas === metaVentas;
+                    case 'sinFiltro':
+                        return true;
+                    default:
+                        return true;
+                }
+            });
+        } else {
+            return ventasFiltradas;
+        }
+    };
+
+    // Función principal para aplicar el filtro
+    const aplicarFiltro = async () => {
+
+        // Parsear la meta de ventas a número
+        const metaVentas = parseFloat(filtroMeta);
+
+        // Verificar si la fecha de inicio es mayor que la fecha de fin
         if (fechaInicio > fechaFin) {
             alert('La fecha de inicio debe ser anterior o igual a la fecha de fin.');
             return;
-        }
+        }   
 
-        const vendedoresFiltrados = vendedores.filter((vendedor) => {
-            const totalVendedor = vendedor.cantidad_ventas || 0;
-            const ventasEnRango = ventas.filter((venta) => {
-                return (
-                    venta.vendedorId === vendedor.id &&
-                    venta.fecha >= fechaInicio &&
-                    venta.fecha <= fechaFin
-                );
-            });
+        // Obtener las ventas filtradas por fecha
+        const ventasFiltradas = await obtenerVentasFiltradas();
 
-            switch (filtroCondicion) {
-                case '<':
-                    return totalVendedor < filtroMeta && (ventasEnRango.length > 0 || !fechaInicio || !fechaFin);
-                case '<=':
-                    return totalVendedor <= filtroMeta && (ventasEnRango.length > 0 || !fechaInicio || !fechaFin);
-                case '>=':
-                    return totalVendedor >= filtroMeta && (ventasEnRango.length > 0 || !fechaInicio || !fechaFin);
-                case '=':
-                    return totalVendedor === filtroMeta && (ventasEnRango.length > 0 || !fechaInicio || !fechaFin);
-                case 'sinFiltro':
-                    return ventasEnRango.length > 0 || !fechaInicio || !fechaFin;
-                default:
-                    return ventasEnRango.length > 0 || !fechaInicio || !fechaFin;
-            }
-        });
+        // Aplicar el filtro por meta a los vendedores
+        const vendedoresFiltrados = aplicarFiltroPorMeta(ventasFiltradas, metaVentas);
 
+        // Actualizar el estado
         setVendedoresFiltrados(vendedoresFiltrados);
     };
 
@@ -174,30 +198,32 @@ function IncentivoPage() {
                     </div>
                     <div className="card-body">
                         <h2>Lista de vendedores</h2>
-                       <div className="table-responsive">
-                       <table className="table table-bordered table-striped">
-                            <thead className="thead-dark">
-                                <tr>
-                                    <th>ID Vendedor</th>
-                                    <th>Nombre Vendedor</th>
-                                    <th>Total de Ventas</th>
-                                    <th>Sede</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {vendedoresFiltrados.map(vendedor => (
-                                    <tr key={vendedor.cedula}>
-                                        <td>{vendedor.cedula}</td>
-                                        <td>{vendedor.nombre}</td>
-                                        <td>{vendedor.cantidad_ventas}</td>
-                                        <td>{/* Mostrar el nombre de la sede */}
-                                            {sedes.find(sede => sede.id === vendedor.sede_id)?.nombre || 'Sin sede'}
-                                        </td>
+                        <div className="table-responsive">
+                            <table className="table table-bordered table-striped">
+                                <thead className="thead-dark">
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Identificacion</th>
+                                        <th>Nombre Vendedor</th>
+                                        <th>Total de Ventas</th>
+                                        <th>Sede</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                       </div>
+                                </thead>
+                                <tbody>
+                                    {vendedoresFiltrados.map((vendedor,index )=> (
+                                        <tr key={index}>
+                                            <td>{index+1}</td>
+                                            <td>{vendedor.cedula}</td>
+                                            <td>{vendedor.nombre}</td>
+                                            <td>{vendedor.cantidad_ventas}</td>
+                                            <td>{/* Mostrar el nombre de la sede */}
+                                                {sedes.find(sede => sede.id === vendedor.sede_id)?.nombre || 'Sin sede'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -207,7 +233,7 @@ function IncentivoPage() {
                         <i className="fas fa-chart-bar me-1"></i> Histograma de Ventas por Usuario
                     </div>
                     <div className="card-body" style={{ width: "auto", height: "400px" }}>
-                    <Histograma datos={vendedoresFiltrados} />
+                        <Histograma datos={vendedoresFiltrados} />
                     </div>
                 </div>
             </div>

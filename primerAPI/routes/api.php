@@ -48,7 +48,9 @@ use App\Http\Controllers\CategoriaController;
     Route::post('/vendedors', [VendedorController::class, 'store'])->name('vendedors.store');
     Route::put('/vendedors/{id}', [VendedorController::class, 'update'])->name('vendedors.update');
     Route::delete('/vendedors/{id}', [VendedorController::class, 'destroy'])->name('vendedors.destroy');
-	Route::get('/cantVentas', [VendedorController::class, 'getCantidadVentasPorVendedor']);
+
+    //Ruta cant de ventas
+	Route::get('/countVentas/{inicio?}/{fin?}', [VendedorController::class, 'getCantidadVentasPorVendedor']);
 
     // Rutas para sede
     Route::get('/facturas', [FacturaController::class, 'index'])->name('facturas.index');
