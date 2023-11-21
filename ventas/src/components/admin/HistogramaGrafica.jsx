@@ -28,7 +28,6 @@ ChartJS.register(
 
 function HistogramaGrafica({datos}) {
 
-    console.log(datos);
     const data = {
         labels: datos.map(dato => dato.nombre),
         datasets: [

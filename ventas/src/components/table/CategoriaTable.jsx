@@ -11,7 +11,7 @@ const CategoriaTable = ({ categorias, handleEditCategoria, handleDeleteCategoria
         <table className="table table-bordered table-striped">
             <thead className="thead-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>N°</th>
                     <th>Nombre</th>
                     <th>Acciones</th>
                 </tr>

@@ -18,8 +18,10 @@ const FacturacionFormulario = ({
     const [sedeSeleccionada, setSedeSeleccionada] = useState('');
     const [vendedorSeleccionado, setVendedorSeleccionado] = useState('');
 
-    const [cantidad, setCantidad] = useState(0);
-    const [precioProducto, setPrecioProducto] = useState(0);
+    const [cantidad, setCantidad] = useState(parseFloat(0));
+    const [precioProducto, setPrecioProducto] = useState(parseFloat(0));
+
+    const [vendedoresPorSede, setVendedoresPorSede] = useState([]);
 
     useEffect(() => {
         fetchProductos();
@@ -27,7 +29,12 @@ const FacturacionFormulario = ({
         fetchVendedores();
         const today = new Date().toISOString().split('T')[0];
         setFecha(today);
-    }, [itemsAgregados]);
+        if (isEditMode) {
+            handleEditMode();
+        }
+
+    }, [isEditMode, newVenta]);
+
 
     const fetchProductos = async () => {
         try {
@@ -55,6 +62,51 @@ const FacturacionFormulario = ({
             console.error('Error fetching vendedores:', error);
         }
     };
+
+    const handleEditMode = () => {
+
+
+
+        // Lógica para establecer los valores iniciales del formulario cuando estás editando
+        setFecha(newVenta.fecha);
+        setPrecioTotal(parseInt(newVenta.total));
+        setSedeSeleccionada(newVenta.sede_id);
+        setVendedorSeleccionado(newVenta.empleado_cedula);
+        handleSedeChange({ target: { value: newVenta.sede_id } });
+
+
+        if (vendedores && newVenta.sede_id) {
+            console.log('Sede ID:', newVenta.sede_id);
+
+            const vendedoresFiltrados = vendedores.filter((vendedor) => vendedor.sede_id === parseInt(newVenta.sede_id, 10));
+
+            console.log('Vendedores Filtrados:', vendedoresFiltrados);
+            setVendedoresPorSede(vendedoresFiltrados);
+        }
+
+
+
+        // Establecer valores para itemsAgregados en modo de edición
+        const editedItems = newVenta.items.map((item) => {
+            const producto = productos.find((p) => p.id === item.producto_id);
+
+            // Verificar que el producto y los valores necesarios estén definidos
+            const precioUnitario = producto ? producto.precio : 0;
+            const cantidad = item.cantidad || 0;
+            const subtotal = precioUnitario * cantidad;
+
+            return {
+                ...item,
+                precioUnitario,
+                subtotal,
+            };
+        });
+
+        setItemsAgregados(editedItems);
+
+
+
+    }
 
     const handleProductoChange = (e) => {
         const producto_id = e.target.value;
@@ -91,12 +143,13 @@ const FacturacionFormulario = ({
             return;
         }
 
-        const subtotal = cantidad * producto.precio;
+
+        const subtotal = cantidad * (producto.precio || precioProducto); // Asegúrate de usar el precio correcto
 
         const newItem = {
             producto_id: producto.id,
             cantidad,
-            precioUnitario: producto.precio,
+            precioUnitario: producto.precio || precioProducto, // Asegúrate de usar el precio correcto
             subtotal,
         };
 
@@ -112,7 +165,7 @@ const FacturacionFormulario = ({
         const removedItem = itemsAgregados[index];
         const subtotal = removedItem.subtotal;
 
-        setItemsAgregados(itemsAgregados.filter((item, i) => i !== index));
+        setItemsAgregados(itemsAgregados.filter((i) => i !== index));
 
         if (itemsAgregados.length < 1) {
             setPrecioTotal(0);
@@ -132,12 +185,16 @@ const FacturacionFormulario = ({
             items: itemsAgregados,
         };
 
-        if (isEditMode) {
-            onUpdateVenta(formData);
-            resetForm();
+        if (itemsAgregados.length > 0) {
+            if (isEditMode) {
+                onUpdateVenta(formData);  // Lógica para la actualización
+                resetForm();
+            } else {
+                onAddVenta(formData);  // Lógica para la adición
+                resetForm();
+            }
         } else {
-            onAddVenta(formData);
-            resetForm();
+            alert("No tiene producto en la lista");
         }
     };
 
@@ -158,7 +215,25 @@ const FacturacionFormulario = ({
     };
 
     const handleSedeChange = (e) => {
-        setSedeSeleccionada(e.target.value);
+        const sedeId = e.target.value;
+        setSedeSeleccionada(sedeId);
+
+        if (vendedores && sedeId) {
+            const vendedoresFiltrados = vendedores.filter((vendedor) => String(vendedor.sede_id) === sedeId);
+
+            setVendedoresPorSede(vendedoresFiltrados);
+        }
+    };
+
+
+    const FormatoColombiano = (valor) => {
+
+        const formatoColombiano = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP'
+        });
+
+        return formatoColombiano.format(valor);
     };
 
     return (
@@ -203,18 +278,23 @@ const FacturacionFormulario = ({
                                                         </option>
                                                     ))}
                                                 </select>
+
+
+                                            </div>
+                                            <div className="col-lg-4">
                                                 <label htmlFor="vendedor" className="form-label">Vendedor:</label>
                                                 <select
                                                     id="vendedor"
                                                     className="form-control"
                                                     value={vendedorSeleccionado}
                                                     onChange={handleVendedorChange}
-
                                                 >
-                                                    <option key="defaultVendedor" value="">Selecciona un vendedor</option>
-                                                    {vendedores.map((vendores) => (
-                                                        <option key={vendores.cedula} value={vendores.cedula}>
-                                                            {vendores.nombre}
+                                                    <option key="defaultVendedor" value="">
+                                                        Selecciona un vendedor
+                                                    </option>
+                                                    {vendedoresPorSede.map((vendedor) => (
+                                                        <option key={vendedor.cedula} value={vendedor.cedula}>
+                                                            {vendedor.nombre}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -226,7 +306,7 @@ const FacturacionFormulario = ({
                                                 <div className="col"><label htmlFor="fecha" className="form-label">Fecha:</label>
                                                     <input type="datetime" id="fecha" className="form-control" value={fecha} onChange={handleFechaChange} /></div>
                                                 <div className="col"> <label htmlFor="total" className="form-label">Total:</label>
-                                                    <input type="text" id="total" className="form-control" value={precioTotal} readOnly /></div>
+                                                    <input type="text" id="total" className="form-control" value={FormatoColombiano(precioTotal)} readOnly /></div>
                                             </div>
                                         </div>
 
@@ -268,7 +348,7 @@ const FacturacionFormulario = ({
                                                     type="text"
                                                     id="precio"
                                                     className="form-control"
-                                                    value={precioProducto}
+                                                    value={FormatoColombiano(precioProducto)}
                                                     readOnly
                                                 />
 
@@ -289,7 +369,7 @@ const FacturacionFormulario = ({
                             <div className="mt-4 table-responsive">
                                 <table className="table">
                                     <thead>
-                                        <tr>
+                                        <tr><th>N°</th>
                                             <th>Producto</th>
                                             <th>Cantidad</th>
                                             <th>Precio Unitario</th>
@@ -300,10 +380,11 @@ const FacturacionFormulario = ({
                                     <tbody>
                                         {itemsAgregados.map((item, index) => (
                                             <tr key={index}>
+                                                <th>{index + 1}</th>
                                                 <td>{productos.find((p) => p.id === parseInt(item.producto_id)).nombre}</td>
                                                 <td>{item.cantidad}</td>
-                                                <td>{item.precioUnitario}</td>
-                                                <td>{item.subtotal}</td>
+                                                <td>{FormatoColombiano(item.precioUnitario)}</td>
+                                                <td>{FormatoColombiano(item.subtotal)}</td>
                                                 <td>
                                                     <button
                                                         type="button"

@@ -4,9 +4,7 @@ import CategoriaService from '../../services/CategoriaServices';
 
 const ProductoTable = ({ products, formatCurrency, handleEditProduct, handleDeleteProduct }) => {
      // Agrega un mensaje si no hay categorías
-     if (products.length === 0) {
-        return <p className='text-center'>No hay productos disponibles.</p>;
-    }
+
     
     const [categorias, setCategorias] = useState([]);
 
@@ -27,6 +25,10 @@ const ProductoTable = ({ products, formatCurrency, handleEditProduct, handleDele
         }
     };
 
+
+     if (products.length === 0) {
+        return <p className='text-center'>No hay productos disponibles.</p>;
+    }
     const getNombreCategoria = (categoriaId) => {
         const categoria = categorias.find((cat) => cat.id === categoriaId);
         return categoria ? categoria.nombre : 'Sin categoría';
@@ -37,7 +39,7 @@ const ProductoTable = ({ products, formatCurrency, handleEditProduct, handleDele
         <table className="table table-bordered table-striped">
             <thead className="thead-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>N°</th>
                     <th>Nombre</th>
                     <th>Precio</th>
                     <th>Talla</th>

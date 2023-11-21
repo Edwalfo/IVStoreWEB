@@ -12,7 +12,7 @@ const SedeTable = ({ sedes, handleEditSede, handleDeleteSede }) => {
         <table className="table table-bordered table-striped">
             <thead className="thead-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>N°</th>
                     <th>Nombre</th>
                     <th>Departamento</th>
                     <th>Ciudad</th>

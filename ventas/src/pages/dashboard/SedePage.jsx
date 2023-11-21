@@ -1,7 +1,7 @@
 // SedePage.js
 import React, { useEffect, useState } from 'react';
 import SedeModal from '../../components/modal/SedeModal';
-import SedeTable from '../../components/table/sedeTable';
+import SedeTable from '../../components/table/SedeTable';
 import SedeService from '../../services/SedeServices';
 
 function SedePage() {

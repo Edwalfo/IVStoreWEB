@@ -8,23 +8,29 @@ use Illuminate\Support\Facades\DB;
 
 class VendedorController extends Controller
 {
-	
-    public function getCantidadVentasPorVendedor()
+
+    public function getCantidadVentasPorVendedor($fechaInicio = null, $fechaFin = null)
     {
-        $ventasPorVendedor = DB::table('vendedors')
-            ->leftJoin('facturas', 'vendedors.cedula', '=', 'facturas.empleado_cedula')
+        $query = DB::table('facturas as f')
+            ->leftJoin('vendedors as v', 'f.empleado_cedula', '=', 'v.cedula')
             ->select(
-                'vendedors.cedula',
-                'vendedors.nombre',
-                'vendedors.sede_id',
-                DB::raw('COUNT(facturas.id) as cantidad_ventas')
+                'f.empleado_cedula as cedula',
+                'v.nombre',
+                'f.sede_id',
+                DB::raw('COUNT(f.id) as cantidad_ventas')
             )
-            ->groupBy('vendedors.cedula', 'vendedors.nombre', 'vendedors.sede_id')
-            ->get();
-    
+            ->groupBy('f.empleado_cedula', 'v.nombre', 'f.sede_id');
+
+        // Aplicar el filtro de fechas solo si se proporcionan ambas fechas
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('f.fecha', [$fechaInicio, $fechaFin]);
+        }
+
+        $ventasPorVendedor = $query->get();
+
         return response()->json(['data' => $ventasPorVendedor, 'message' => 'Cantidad de ventas por vendedor recuperada exitosamente']);
     }
-	
+    
     public function index()
     {
         $vendedors = Vendedor::all();
