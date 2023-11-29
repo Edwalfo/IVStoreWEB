@@ -130,12 +130,28 @@ const HistorialPage = () => {
 
 
 
-    const handleFechaInicioChange = (e) => {
-        setFechaInicio(e.target.value);
+  const handleFechaInicioChange = (e) => {
+        const fechaInicioSeleccionada = e.target.value;
+
+        // Verificar si la fecha de inicio seleccionada es anterior a la fecha de fin
+        if (!fechaFin || fechaInicioSeleccionada <= fechaFin) {
+            setFechaInicio(fechaInicioSeleccionada);
+        } else {
+            // Mostrar un mensaje de error o manejar la selección de fecha no válida según sea necesario
+            alert('Error: La fecha de inicio debe ser anterior o igual a la fecha de fin.');
+        }
     };
 
     const handleFechaFinChange = (e) => {
-        setFechaFin(e.target.value);
+        const fechaFinSeleccionada = e.target.value;
+
+        // Verificar si la fecha de fin seleccionada es posterior a la fecha de inicio
+        if (!fechaInicio || fechaFinSeleccionada >= fechaInicio) {
+            setFechaFin(fechaFinSeleccionada);
+        } else {
+            // Mostrar un mensaje de error o manejar la selección de fecha no válida según sea necesario
+            alert('Error: La fecha de fin debe ser posterior o igual a la fecha de inicio.');
+        }
     };
 
     const filtrarPorFecha = (facturaFecha) => {
